@@ -10,12 +10,13 @@ from ctfd.resources._base import Resource, _data, _data_list, _serialize
 
 
 class ConfigsResource(Resource):
-    """Bindings for the ``/configs`` and ``/configs/fields`` endpoints.
+    """``/configs`` — keyed by string (not integer id), plus the ``/configs/fields`` sub-resource.
 
-    Unlike most CTFd resources, configs are keyed by string (``config_key``)
-    rather than integer ID, and the collection endpoint supports PATCH for bulk
-    updates.
+    The collection endpoint also accepts ``PATCH`` for bulk updates, which has
+    no equivalent in the generic CRUD mixins.
     """
+
+    path = '/configs'
 
     async def list(self) -> list[Config]:
         payload = await self._http.get_json('/configs')
@@ -26,7 +27,7 @@ class ConfigsResource(Resource):
         return Config.model_validate(_data(payload))
 
     async def bulk_update(self, body: dict[str, Any]) -> dict[str, Any]:
-        """Update multiple configuration keys in one call."""
+        """Update multiple configuration keys in one call (``PATCH /configs``)."""
 
         payload = await self._http.patch_json('/configs', json=_serialize(body))
         result = _data(payload)
@@ -43,10 +44,11 @@ class ConfigsResource(Resource):
     async def delete(self, config_key: str) -> None:
         await self._http.delete_json(f'/configs/{config_key}')
 
-    async def list_fields(self) -> builtins.list[dict[str, Any]]:
+    async def fields(self) -> builtins.list[dict[str, Any]]:
+        """List configurable user/team profile fields (``GET /configs/fields``)."""
+
         payload = await self._http.get_json('/configs/fields')
-        data = _data_list(payload)
-        return [item for item in data if isinstance(item, dict)]
+        return [item for item in _data_list(payload) if isinstance(item, dict)]
 
     async def create_field(self, body: dict[str, Any]) -> dict[str, Any]:
         payload = await self._http.post_json('/configs/fields', json=_serialize(body))

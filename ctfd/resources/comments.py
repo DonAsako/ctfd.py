@@ -1,15 +1,11 @@
 from __future__ import annotations
 
 from ctfd.models import Comment
-from ctfd.resources._base import CRUDResource
+from ctfd.resources._base import _CreateOps, _DeleteOps, _ListOps
 
 
-class CommentsResource(CRUDResource[Comment]):
+class CommentsResource(_ListOps[Comment], _CreateOps[Comment], _DeleteOps):
+    """``/comments`` — collection list/create + per-id delete. CTFd exposes no GET-by-id or PATCH."""
+
     path = '/comments'
     model = Comment
-
-    async def get(self, resource_id: int | str) -> Comment:
-        raise NotImplementedError('The CTFd API does not expose a single-comment endpoint.')
-
-    async def update(self, resource_id: int | str, body: object) -> Comment:
-        raise NotImplementedError('The CTFd API does not support updating comments.')

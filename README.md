@@ -25,7 +25,7 @@ async def main():
     async with CTFdClient('https://my-ctf.example.com', token='ctfd_...') as ctfd:
         # Get the current user
         me = await ctfd.users.me()
-        print(me.name, me.score)
+        print(me.id, me.name)
 
         # List all challenges
         challenges = await ctfd.challenges.list()

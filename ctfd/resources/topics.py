@@ -1,20 +1,20 @@
 from __future__ import annotations
 
 from ctfd.models import Topic
-from ctfd.resources._base import CRUDResource
+from ctfd.resources._base import _CreateOps, _DeleteOps, _GetOps, _ListOps
 
 
-class TopicsResource(CRUDResource[Topic]):
+class TopicsResource(_ListOps[Topic], _GetOps[Topic], _CreateOps[Topic], _DeleteOps):
+    """``/topics`` — list, retrieve, create, delete by id, plus ``unlink`` on the collection."""
+
     path = '/topics'
     model = Topic
 
-    async def unlink(self, *, topic_id: int | None = None, challenge_id: int | None = None) -> None:
-        """Detach a topic from a challenge.
+    async def unlink(self, *, target_id: int, type: str) -> None:  # noqa: A002
+        """Detach a topic from a target (challenge, page, ...).
 
-        The CTFd API exposes deletion on the collection itself via query
-        parameters (rather than ``/topics/{id}``) to support unlinking a topic
-        from a specific challenge without removing the topic record.
+        Maps to ``DELETE /topics?type=...&target_id=...``; the topic record
+        itself is preserved.
         """
 
-        params = {'topic_id': topic_id, 'challenge_id': challenge_id}
-        await self._http.delete_json(self.path, params=params)
+        await self._http.delete_json(self.path, params={'target_id': target_id, 'type': type})

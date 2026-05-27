@@ -33,7 +33,3 @@ class TestBracketsResource:
 
     async def test_delete(self, mock_client: CTFdClient) -> None:
         await mock_client.brackets.delete(1)
-
-    async def test_get_raises(self, mock_client: CTFdClient) -> None:
-        with pytest.raises(NotImplementedError):
-            await mock_client.brackets.get(1)

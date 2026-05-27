@@ -3,13 +3,29 @@ from __future__ import annotations
 from typing import Any
 
 from ctfd.models import Award, Submission, Team
-from ctfd.resources._base import CRUDResource, _data, _data_list, _serialize
+from ctfd.resources._base import (
+    _CreateOps,
+    _data,
+    _data_list,
+    _DeleteOps,
+    _GetOps,
+    _ListOps,
+    _serialize,
+    _UpdateOps,
+)
 
 
-class TeamsResource(CRUDResource[Team]):
+class TeamsResource(
+    _ListOps[Team],
+    _GetOps[Team],
+    _CreateOps[Team],
+    _UpdateOps[Team],
+    _DeleteOps,
+):
     path = '/teams'
     model = Team
 
+    # ── /teams/me ────────────────────────────────────────────────────────────
     async def me(self) -> Team:
         payload = await self._http.get_json('/teams/me')
         return Team.model_validate(_data(payload))
@@ -38,6 +54,7 @@ class TeamsResource(CRUDResource[Team]):
         result = _data(payload)
         return result if isinstance(result, dict) else {}
 
+    # ── /teams/{team_id}/* ───────────────────────────────────────────────────
     async def awards(self, team_id: int) -> list[Award]:
         payload = await self._http.get_json(f'/teams/{team_id}/awards')
         return [Award.model_validate(item) for item in _data_list(payload)]

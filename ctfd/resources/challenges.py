@@ -3,15 +3,29 @@ from __future__ import annotations
 from typing import Any
 
 from ctfd.models import Challenge, File, Flag, Hint, Solution, Submission, Tag, Topic
-from ctfd.resources._base import CRUDResource, _data, _data_list
+from ctfd.resources._base import (
+    _CreateOps,
+    _data,
+    _data_list,
+    _DeleteOps,
+    _GetOps,
+    _ListOps,
+    _UpdateOps,
+)
 
 
-class ChallengesResource(CRUDResource[Challenge]):
+class ChallengesResource(
+    _ListOps[Challenge],
+    _GetOps[Challenge],
+    _CreateOps[Challenge],
+    _UpdateOps[Challenge],
+    _DeleteOps,
+):
     path = '/challenges'
     model = Challenge
 
     async def attempt(self, challenge_id: int, submission: str) -> dict[str, Any]:
-        """Submit an attempt against a challenge and return the raw API result."""
+        """Submit an attempt against a challenge (``POST /challenges/attempt``)."""
 
         payload = await self._http.post_json(
             '/challenges/attempt',

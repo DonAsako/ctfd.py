@@ -6,11 +6,11 @@ from ctfd.resources._base import Resource, _data
 
 
 class StatisticsResource(Resource):
-    """Bindings for the ``/statistics/*`` endpoints.
+    """``/statistics/*`` — aggregate counters and matrices.
 
-    These endpoints return heterogeneous aggregate payloads (per-category
-    counters, percentages, time-series matrices, ...), so they are exposed as
-    raw mappings rather than strongly-typed models.
+    These endpoints return heterogeneous payloads (per-category counters,
+    percentages, time-series matrices, ...), so they are exposed as raw
+    mappings rather than strongly-typed models.
     """
 
     async def challenge_solves(self) -> dict[str, Any]:

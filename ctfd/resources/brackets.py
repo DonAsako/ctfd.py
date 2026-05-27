@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from ctfd.models import Bracket
-from ctfd.resources._base import CRUDResource
+from ctfd.resources._base import _CreateOps, _DeleteOps, _ListOps, _UpdateOps
 
 
-class BracketsResource(CRUDResource[Bracket]):
+class BracketsResource(_ListOps[Bracket], _CreateOps[Bracket], _UpdateOps[Bracket], _DeleteOps):
+    """``/brackets`` — no single-bracket GET endpoint is exposed by CTFd."""
+
     path = '/brackets'
     model = Bracket
-
-    async def get(self, resource_id: int | str) -> Bracket:
-        raise NotImplementedError('The CTFd API does not expose a single-bracket endpoint.')

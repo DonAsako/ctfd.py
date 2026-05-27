@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from ctfd.models import Notification
-from ctfd.resources._base import CRUDResource
+from ctfd.resources._base import _CreateOps, _DeleteOps, _GetOps, _ListOps
 
 
-class NotificationsResource(CRUDResource[Notification]):
+class NotificationsResource(_ListOps[Notification], _GetOps[Notification], _CreateOps[Notification], _DeleteOps):
+    """``/notifications`` — list, retrieve, create, delete."""
+
     path = '/notifications'
     model = Notification
-
-    async def update(self, resource_id: int | str, body: object) -> Notification:
-        raise NotImplementedError('The CTFd API does not support updating notifications.')

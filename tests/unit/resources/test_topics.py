@@ -36,4 +36,4 @@ class TestTopicsResource:
         await mock_client.topics.delete(1)
 
     async def test_unlink(self, mock_client: CTFdClient) -> None:
-        await mock_client.topics.unlink(topic_id=1, challenge_id=5)
+        await mock_client.topics.unlink(target_id=5, type='challenge')

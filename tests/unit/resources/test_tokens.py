@@ -32,7 +32,3 @@ class TestTokensResource:
 
     async def test_delete(self, mock_client: CTFdClient) -> None:
         await mock_client.tokens.delete(1)
-
-    async def test_update_raises(self, mock_client: CTFdClient) -> None:
-        with pytest.raises(NotImplementedError):
-            await mock_client.tokens.update(1, {})

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from ctfd.models import Award
-from ctfd.resources._base import CRUDResource
+from ctfd.resources._base import _CreateOps, _DeleteOps, _GetOps, _ListOps
 
 
-class AwardsResource(CRUDResource[Award]):
+class AwardsResource(_ListOps[Award], _GetOps[Award], _CreateOps[Award], _DeleteOps):
+    """``/awards`` — list, retrieve, create, delete (CTFd does not expose PATCH)."""
+
     path = '/awards'
     model = Award
-
-    async def update(self, resource_id: int | str, body: object) -> Award:
-        raise NotImplementedError('The CTFd API does not support updating awards.')

@@ -108,3 +108,35 @@ class TestHTTPErrors:
     async def test_500_raises_server_error(self, http_client: AsyncHTTPClient) -> None:
         with pytest.raises(CTFdServerError):
             await http_client.get_json('/error_500')
+
+
+@pytest.mark.unit
+class TestLoginRedirectGuard:
+    """When CTFd answers a /api/v1/... request with 302 → /login, treat it as auth-required."""
+
+    @staticmethod
+    def _client(location: str, *, status: int = 302) -> AsyncHTTPClient:
+        def handler(_request: httpx.Request) -> httpx.Response:
+            return httpx.Response(status, headers={'location': location})
+
+        inner = httpx.AsyncClient(base_url='http://ctfd.test/api/v1', transport=httpx.MockTransport(handler))
+        return AsyncHTTPClient('http://ctfd.test', client=inner)
+
+    async def test_login_redirect_raises_authentication_error(self) -> None:
+        client = self._client('/login?next=%2Fapi%2Fv1%2Fchallenges%3F')
+        with pytest.raises(CTFdAuthenticationError) as exc_info:
+            await client.get_json('/challenges')
+        assert '/login' in exc_info.value.message
+
+    async def test_non_login_redirect_is_not_intercepted(self) -> None:
+        client = self._client('/somewhere-else')
+        # Non-login 3xx is not raised; the response is returned as-is and
+        # _decode_json reads its (empty) body without crashing.
+        result = await client.get_json('/challenges')
+        assert result is None
+
+    async def test_site_root_strips_api_v1_suffix(self) -> None:
+        c1 = AsyncHTTPClient('http://example.com/api/v1')
+        c2 = AsyncHTTPClient('http://example.com')
+        assert c1.site_root == 'http://example.com'
+        assert c2.site_root == 'http://example.com'

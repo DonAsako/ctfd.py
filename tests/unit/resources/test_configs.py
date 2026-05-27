@@ -50,8 +50,8 @@ class TestConfigsResource:
     async def test_delete_by_key(self, mock_client: CTFdClient) -> None:
         await mock_client.configs.delete('ctf_name')
 
-    async def test_list_fields(self, mock_client: CTFdClient) -> None:
-        fields = await mock_client.configs.list_fields()
+    async def test_fields(self, mock_client: CTFdClient) -> None:
+        fields = await mock_client.configs.fields()
         assert fields[0]['name'] == 'affiliation'
 
     async def test_create_field(self, mock_client: CTFdClient) -> None:

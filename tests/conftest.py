@@ -9,7 +9,7 @@ import pytest
 from ctfd.client import CTFdClient
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import AsyncGenerator, Callable
 
 
 def make_response(
@@ -44,13 +44,15 @@ def simple_transport(responses: dict[str, Any]) -> httpx.MockTransport:
 
 
 @pytest.fixture
-def mock_client(request: pytest.FixtureRequest) -> CTFdClient:
+async def mock_client(request: pytest.FixtureRequest) -> AsyncGenerator[CTFdClient]:
     """Return a CTFdClient backed by a mock transport.
 
     Use the ``responses`` marker to inject route → payload pairs::
 
         @pytest.mark.responses({'GET /api/v1/challenges': {'success': True, 'data': [...]}})
         async def test_foo(mock_client): ...
+
+    The underlying httpx client is closed at fixture teardown.
     """
     marker = request.node.get_closest_marker('responses')
     responses: dict[str, Any] = marker.args[0] if marker else {}
@@ -59,7 +61,12 @@ def mock_client(request: pytest.FixtureRequest) -> CTFdClient:
         base_url='http://ctfd.test/api/v1',
         transport=transport,
     )
-    return CTFdClient('http://ctfd.test', client=inner)
+    client = CTFdClient('http://ctfd.test', client=inner)
+    try:
+        yield client
+    finally:
+        await client.aclose()
+        await inner.aclose()
 
 
 def pytest_configure(config: pytest.Config) -> None:

@@ -30,7 +30,7 @@ class AsyncHTTPClient:
         verify: bool = True,
         client: httpx.AsyncClient | None = None,
     ) -> None:
-        self._base_url = base_url.rstrip('/')
+        self._base_url = base_url.rstrip('/').removesuffix('/api/v1')
         self._token = token
         self._owns_client = client is None
         headers = {
@@ -47,9 +47,13 @@ class AsyncHTTPClient:
         )
 
     def _api_root(self) -> str:
-        if self._base_url.endswith('/api/v1'):
-            return self._base_url
         return f'{self._base_url}/api/v1'
+
+    @property
+    def site_root(self) -> str:
+        """Origin URL of the CTFd instance, without the ``/api/v1`` suffix."""
+
+        return self._base_url
 
     async def __aenter__(self) -> Self:
         return self
@@ -134,6 +138,17 @@ class AsyncHTTPClient:
     ) -> Any:
         response = await self.request('PUT', path, json=json, params=params)
         return _decode_json(response)
+
+    async def get_bytes(self, url: str) -> bytes:
+        """Fetch raw bytes from an absolute URL (e.g. a non-API file download).
+
+        Absolute URLs bypass the ``/api/v1`` base prefix configured on the
+        underlying httpx client, which is what CTFd's static file endpoints
+        require.
+        """
+
+        response = await self.request('GET', url)
+        return response.content
 
 
 def _clean_params(params: dict[str, Any] | None) -> dict[str, Any] | None:
