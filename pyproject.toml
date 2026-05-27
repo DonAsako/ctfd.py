@@ -29,6 +29,7 @@ Homepage   = "https://donasako.fr/"
 Repository = "https://github.com/DonAsako/python-project-template"
 Issues     = "https://github.com/DonAsako/python-project-template/issues"
 
+
 [dependency-groups]
 dev = [
     # Linters / type-checkers / formatters
