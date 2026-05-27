@@ -5,9 +5,9 @@ build-backend = "hatchling.build"
 [project]
 name = "ctfd-api"
 version = "0.1.0"
-description = "Python client for the CTFd API"
-readme = "README.md"
-authors = [{ name = "DonAsako", email = "asako@donasako.fr" }]
+description = " A Python wrapper for the CTFd API — automate and script your CTF platforms with a clean, pythonic interface. "
+readme = { file = "README.md", content-type = "text/markdown" }
+authors = [{ name = "DonAsako" }]
 requires-python = ">=3.13"
 license = "GPL-3.0-or-later"
 license-files = ["LICENSE"]
@@ -25,9 +25,8 @@ classifiers = [
 dependencies = ["pydantic>=2.13.4", "httpx>=0.28.0"]
 
 [project.urls]
-Homepage   = "https://donasako.fr/"
-Repository = "https://github.com/DonAsako/python-project-template"
-Issues     = "https://github.com/DonAsako/python-project-template/issues"
+Repository = "https://github.com/DonAsako/ctfd.py"
+Issues     = "https://github.com/DonAsako/ctfd.py/issues"
 
 
 [dependency-groups]
@@ -368,5 +367,5 @@ commit_message = "chore(release): {version}"
 tag_format     = "v{version}"
 
 [tool.semantic_release.branches.main]
-match = "main"
+match      = "main"
 prerelease = false
