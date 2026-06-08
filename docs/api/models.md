@@ -1,6 +1,6 @@
 # Models
 
-::: ctfd.models.\_base.CTFdModel
+::: ctfd.models._base.CTFdModel
 
 ::: ctfd.models.award.Award
 

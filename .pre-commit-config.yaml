@@ -51,6 +51,7 @@ repos:
     rev: 0.7.21
     hooks:
       - id: mdformat
+        exclude: ^docs/
         additional_dependencies:
           - mdformat-gfm
           - mdformat-frontmatter

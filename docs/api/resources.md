@@ -2,17 +2,17 @@
 
 ## Base classes
 
-::: ctfd.resources.\_base.Resource
+::: ctfd.resources._base.Resource
 
-::: ctfd.resources.\_base.\_ListOps
+::: ctfd.resources._base._ListOps
 
-::: ctfd.resources.\_base.\_GetOps
+::: ctfd.resources._base._GetOps
 
-::: ctfd.resources.\_base.\_CreateOps
+::: ctfd.resources._base._CreateOps
 
-::: ctfd.resources.\_base.\_UpdateOps
+::: ctfd.resources._base._UpdateOps
 
-::: ctfd.resources.\_base.\_DeleteOps
+::: ctfd.resources._base._DeleteOps
 
 ## Awards
 
