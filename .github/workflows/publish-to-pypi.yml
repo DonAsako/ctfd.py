@@ -112,14 +112,12 @@ jobs:
 
       - uses: pypa/gh-action-pypi-publish@release/v1
 
-  # Deploy MkDocs to GitHub Pages (main branch only)
+  # Build MkDocs site (main branch only)
   docs:
-    name: Deploy docs
+    name: Build docs
     needs: ci
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -133,8 +131,29 @@ jobs:
       - name: Install docs dependencies
         run: uv sync --group docs
 
+      - name: Build docs
+        run: uv run --group docs mkdocs build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  # Deploy the built site to GitHub Pages
+  deploy-docs:
+    name: Deploy docs
+    needs: docs
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
       - name: Deploy to GitHub Pages
-        run: uv run --group docs mkdocs gh-deploy --force
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   # Attach dist files to the GitHub release
   github-release:
