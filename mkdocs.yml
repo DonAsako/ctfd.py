@@ -9,14 +9,10 @@ theme:
   name: material
   palette:
     - scheme: default
-      primary: deep orange
-      accent: orange
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: deep orange
-      accent: orange
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -26,6 +22,17 @@ theme:
     - navigation.top
     - search.highlight
     - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
 
 plugins:
   - search
