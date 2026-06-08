@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ctfd-api"
-version = "0.2.0"
+version = "0.2.1"
 description = " A Python wrapper for the CTFd API — automate and script your CTF platforms with a clean, pythonic interface. "
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [{ name = "DonAsako" }]
@@ -27,6 +27,7 @@ dependencies = ["pydantic>=2.13.4", "httpx>=0.28.0"]
 [project.urls]
 Repository = "https://github.com/DonAsako/ctfd.py"
 Issues     = "https://github.com/DonAsako/ctfd.py/issues"
+
 
 
 

@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.2.1 (2026-06-08)
+
+### Bug Fixes
+
+- **docs**: Escape underscore
+  ([`1e4540b`](https://github.com/DonAsako/ctfd.py/commit/1e4540b290d1920f16b72226e665861f69b92250))
+
+### Documentation
+
+- Add docs + github page
+  ([`216650e`](https://github.com/DonAsako/ctfd.py/commit/216650e446401eaf4f6fb95c8a15018b15ce1c2e))
+
+
 ## v0.2.0 (2026-05-27)
 
 ### Documentation
