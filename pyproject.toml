@@ -25,8 +25,11 @@ classifiers = [
 dependencies = ["pydantic>=2.13.4", "httpx>=0.28.0"]
 
 [project.urls]
-Repository = "https://github.com/DonAsako/ctfd.py"
-Issues     = "https://github.com/DonAsako/ctfd.py/issues"
+Homepage      = "https://donasako.github.io/ctfd.py/"
+Documentation = "https://donasako.github.io/ctfd.py/"
+Repository    = "https://github.com/DonAsako/ctfd.py"
+Issues        = "https://github.com/DonAsako/ctfd.py/issues"
+Changelog     = "https://github.com/DonAsako/ctfd.py/blob/main/CHANGELOG.md"
 
 
 
