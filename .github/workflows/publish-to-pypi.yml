@@ -1,6 +1,6 @@
 name: CI & Release
 
-on:
+"on":
   push:
     branches: [main]
   pull_request:
@@ -9,9 +9,10 @@ on:
 permissions:
   contents: write
   id-token: write
+  pages: write
 
 jobs:
-  # ── Run tests and linters on every push / PR ─────────────────────────────
+  # Run tests and linters on every push / PR
   ci:
     name: Tests & Lint
     runs-on: ubuntu-latest
@@ -35,7 +36,7 @@ jobs:
       - name: Tests
         run: uv run pytest --cov --cov-report=term-missing
 
-  # ── Semantic release (main branch only, after CI passes) ─────────────────
+  # Semantic release (main branch only, after CI passes)
   release:
     name: Semantic Release
     needs: ci
@@ -66,7 +67,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  # ── Build the distribution from the released tag ─────────────────────────
+  # Build the distribution from the released tag
   build:
     name: Build distribution
     needs: release
@@ -91,7 +92,7 @@ jobs:
           name: python-package-distributions
           path: dist/
 
-  # ── Publish to PyPI via trusted publishing ────────────────────────────────
+  # Publish to PyPI via trusted publishing
   publish-to-pypi:
     name: Publish to PyPI
     needs: [release, build]
@@ -111,7 +112,31 @@ jobs:
 
       - uses: pypa/gh-action-pypi-publish@release/v1
 
-  # ── Attach dist files to the GitHub release ──────────────────────────────
+  # Deploy MkDocs to GitHub Pages (main branch only)
+  docs:
+    name: Deploy docs
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install docs dependencies
+        run: uv sync --group docs
+
+      - name: Deploy to GitHub Pages
+        run: uv run --group docs mkdocs gh-deploy --force
+
+  # Attach dist files to the GitHub release
   github-release:
     name: GitHub Release
     needs: [release, build]
