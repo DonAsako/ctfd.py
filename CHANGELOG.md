@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.2.2 (2026-06-08)
+
+### Bug Fixes
+
+- **docs**: Use Github Action
+  ([`f001bf4`](https://github.com/DonAsako/ctfd.py/commit/f001bf4c0c9ba234354fb47e189fae55fdb39266))
+
+
 ## v0.2.1 (2026-06-08)
 
 ### Bug Fixes
